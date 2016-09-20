@@ -213,8 +213,18 @@
 
       function initMap() {
 
-        var intervalForAnimation;
         var count = 0;
+
+        //second Line variables. 
+        var interval;
+        var intervalForAnimation;
+        var intervalForSecondAnimation;
+        var secondaryCount = 0;
+        var timeForSecondLine = false;
+
+        var Line;
+        var Line1;
+
         var DrivePath = [
           new google.maps.LatLng(37.772323, -122.214897),
           new google.maps.LatLng(21.291982, -157.821856),
@@ -380,9 +390,21 @@
                   $("#map").after(animateCircle(count));
                   count = (count+0.2) % 200;
               }, 20);
+              //secondLine Code.
+              interval = window.setInterval(function(){
+              if(!timeForSecondLine){
+                if(count >= 50){
+                   timeForSecondLine = true;
+                   callTheSecondLine();
+                }
+              }
+              }, 20);
           }
 
           $(".play").click(function() {
+              //secondLine.
+              timeForSecondLine = false;
+              //prior to the second Line code
               playing();
               marker.setMap(map);
               motherShipLayer.setMap(map);
@@ -394,11 +416,21 @@
           $(".pause").click(function() {
               clearInterval(intervalForAnimation);
               $(this).hide();
-              $(".play").show();              
+              $(".play").show();
+              //secondLine Code.
+              clearInterval(intervalForSecondAnimation);
+
           });
 
           $(".reset").click(function(){
               count = 0;
+              //secondLine Code
+              Line.setMap(null);
+              secondLine();
+              secondaryCount = 0;
+              timeForSecondLine = false;
+              Line1.setMap(map);
+              //-----------------//
               motherShipLayer.setMap(map);
             for(var i = 0; i < lineArray1.length; i++){
               line11 = lineArray1[i];
@@ -408,6 +440,8 @@
 
           $(".end").click(function(){
             count = 200;
+            //secondLine
+            secondaryCount = 200;
           });
 
 
@@ -468,21 +502,22 @@
           population: 3714856
         }
       };*/
-      var timeForSecondLine = false;
 
       //Our Second Line. Still a prototype.
-      window.setInterval(function(){
-           if(count >= 50){
-         timeForSecondLine = true;
-       }
+      /*
+      var interval = window.setInterval(function(){
+        if(!timeForSecondLine){
+          if(count >= 50){
+             timeForSecondLine = true;
+             callTheSecondLine();
+          }
+        }
       }, 20);
+      */
 
-      if(timeForSecondLine){
-        callTheSecondLine();
-      }
-
-       function callTheSecondLine(){
-          var Line = new google.maps.Polyline({
+      //secondLine Code.
+      function secondLine(){
+      Line = new google.maps.Polyline({
             //path to be set.
               path: [{lat: 9.709057068618222, lng: 65.5224609375}, {lat: 7.100892668623654, lng: 58.9306640625}],
               icons: [
@@ -496,7 +531,7 @@
               strokeWeight: 2,
               map: map
           });
-          line1 = new google.maps.Polyline({
+      Line1 = new google.maps.Polyline({
               path: [{lat: 9.709057068618222, lng: 65.5224609375}, {lat: 7.100892668623654, lng: 58.9306640625}],
               icons: [
                 {
@@ -511,19 +546,28 @@
               strokeOpacity: 1.0,
               strokeWeight: 2,
               map: map
-            });
-          animateCircle1(Line);
+        });
+    }
+
+      secondLine();
+
+       function callTheSecondLine(){
+        clearInterval(interval);
+        timeForSecondLine = true;
+          intervalForSecondAnimation = window.setInterval(function() {
+            animateCircle1(Line);
+          }, 20);
        }
 
        function animateCircle1(Line) {
-          var secondaryCount = 0;
-          window.setInterval(function() {
             secondaryCount = (secondaryCount + 1) % 200;
-
             var icons = Line.get('icons');
             icons[0].offset = (secondaryCount / 2) + '%';
             Line.set('icons', icons);
-        }, 20);
+            if(secondaryCount >= 199){
+              clearInterval(intervalForSecondAnimation);
+              Line1.setMap(null);
+            }
       }
 
 
