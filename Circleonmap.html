@@ -71,8 +71,8 @@
 
   <!-- 1st ROW -->
   <div class="container">
+  <h3>Project Details</h3>
     <div class="row" id="row1">
-      <h3>Project Details</h3>
       <hr class="hrStyle"></hr>
         <div class="col-md-3">
           <h4>Project Number:</h4>
@@ -96,8 +96,9 @@
 
     <!-- 2nd ROW -->
   <div class="container">
+    <h3>Filters</h3>
+    <p><input type="submit" name="button" id="button" value="Show" /></p>
     <div class="row" id="row2">
-      <h3>Filters</h3>
       <hr class="hrStyle"></hr>
         <div class="col-md-4">
           <h4>From Date:</h4>
@@ -129,8 +130,10 @@
 
     <hr class="hrStyle"></hr>
 
+    <div class="container">
+    <h3>Map with our complete Route System:</h3>
+    </div>
     <div class="container" id="map">
-      <p>Map:</p>
     </div>
 
 
@@ -203,6 +206,17 @@
       }
 
     
+    </script>
+    <script>
+       <!--Function for revealing or hiding a table-->
+        $(document).ready(function()
+        {   
+            $("#row2").hide();
+            $("#button").click(function()
+            {
+                $("#row2").toggle();
+            });
+        });
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYJY_vFKIl-VEdyoEd3hZI8Wv1JdNzTmI&callback=initMap"></script>

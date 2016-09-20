@@ -10,17 +10,14 @@ html, body {
   margin-top: 120px;
   text-align: center;
 }
+.hrStyle{
+  width: 100%;
+}
 
 /*Id's*/
 #map {
   height: 100%;
 }
-#row1{
-  margin-top: 20px;
-}
 #row2{
   margin-bottom: 50px;
-}
-.hrStyle{
-  width: 100%;
 }
