@@ -11,6 +11,9 @@
         <link href="css/bootstrap.min.css" rel="stylesheet"></link>
         <link href="css/AnimatingSymbols.css" rel="stylesheet"></link>
         <link rel="stylesheet" href="font-awesome-4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.2.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.2.0/material.min.js"></script>
         <!--<link href="MDB-Free/css/mdb.min.css" rel="stylesheet">-->
         <title>Animating Symbols</title>
 
@@ -35,20 +38,23 @@
         $('.dropdown-toggle').dropdown();
           });
       </script>
-      <!--<script>
+      <script>
         $(function() {
         $("#slider").slider({
           max: 200,
           min: 0,
           change: function(event, ui) {
+          for(var i = 0;i < lineArray.length; i++){
           console.log("ui.value=" + ui.value);
-          var icons = line.get('icons');
+          line111 = lineArray[i];
+          var icons = line111.get('icons');
           icons[0].offset = (ui.value / 2) + '%';
-          line.set('icons', icons);
+          line111.set('icons', icons);
+          }
           }
           });
         });
-      </script>-->
+      </script>
 
 
 
@@ -115,13 +121,16 @@
     <h3>Filters</h3>
     <hr class="hrRow" id="lineHr2"></hr>
     <div class="row" id="row2">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <h4>From Date:</h4>
         <p><a class="btn btn-default" title="Select here" role="button"><input id="datepickerFrom" title="Click here"></input></a></p>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <h4>To Date:</h4>
         <p><a class="btn btn-default" title="Select here" role="button"><input id="datepickerTo" title="Click here"></input></a></p>
+      </div>
+      <div class="col-md-4 submit">
+        <p><a class="btn btn-default" role="button">Submit</a></p>
       </div>
         <!--<div class="col-md-4">
           <h4>View:</h4>
@@ -150,7 +159,7 @@
       <a class="btn btn-default btn-sm play" alt="Play" title="Play">
       <i class="fa fa-play fa-lg" aria-hidden="true"></i></a>
     <!--Pause button-->
-      <a class="btn btn-default btn-sm pause" alt="Pause" title="Pause">
+      <a class="btn btn-default btn-sm pause" alt="Pause" title="Pause" style="display:none;">
       <i class="fa fa-pause fa-lg" aria-hidden="true"></i></a>
     <!--Reset and Stop button-->
       <a class="btn btn-default btn-sm reset" alt="Restart" title="Restart">
@@ -159,6 +168,8 @@
       slider
       <div id="slider"></div>
       </div>
+      <input class="mdl-slider mdl-js-slider" type="range"
+        min="0" max="100" value="0" tabindex="0">
 
 <!--<button type="button" class="play">Play</button>
       <input type="button" value="updateBar()" onclick="updateBar()" />
@@ -178,13 +189,14 @@
     <script>
       var line;
       var line1;
+      var lineArray = [];
+      var lineArray1 = [];
       // This example adds an animated symbol to a polyline.
 
       function initMap() {
 
         var intervalForAnimation;
         var count = 0;
-        var n = 2;
         var DrivePath = [
           new google.maps.LatLng(37.772323, -122.214897),
           new google.maps.LatLng(21.291982, -157.821856),
@@ -282,7 +294,7 @@
         });*/
 
           for (var i = 0; i < DrivePath.length-1; i++) {
-            var line = new google.maps.Polyline({
+              var line = new google.maps.Polyline({
               path: [DrivePath[i], DrivePath[i+1]],
               icons: [
                 {
@@ -295,10 +307,11 @@
               strokeWeight: 2,
               map: map
             });
-          }
+             lineArray[i] = line;
+            }
 
         for (var i = 0; i < DrivePath.length-1; i++) {
-            var line1 = new google.maps.Polyline({
+            line1 = new google.maps.Polyline({
               path: [DrivePath[i], DrivePath[i+1]],
               icons: [
                 {
@@ -314,56 +327,73 @@
               strokeWeight: 2,
               map: map
             });
+            lineArray1[i] = line1;
           }
 
+            console.log(lineArray.length);
+            console.log(lineArray1.length);
 
           //Map boundaries
           var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < line.getPath().getLength(); i++) {
               bounds.extend(line.getPath().getAt(i));
             }
-          //map.fitBounds(bounds);
+          map.fitBounds(bounds);
 
 
         function playing() {
               intervalForAnimation = window.setInterval(function() {
-                  $("#map").after(animateCircle(line,count,n));
+                  $("#map").after(animateCircle(count));
                   count = (count+0.2) % 200;
               }, 20);
           }
 
           $(".play").click(function() {
               playing();
+              $(this).hide();
+              $(".pause").show();
           });
 
 
           $(".pause").click(function() {
               clearInterval(intervalForAnimation);
-
+              $(this).hide();
+              $(".play").show();              
           });
 
           $(".reset").click(function(){
               count = 0;
-              line1.setMap(map);
+            for(var i = 0; i < lineArray1.length; i++){
+              line11 = lineArray1[i];
+              line11.setMap(map);
+            }
           });
 
 
       // Use the DOM setInterval() function to change the offset of the symbol
       // at fixed intervals.
-      function animateCircle(line,count,n) {
-          var icons = line.get('icons');
+      function animateCircle(count) {
+        for(var i = 0; i < lineArray.length; i++){
+          line10 = lineArray[i];
+          var icons = line10.get('icons');
           icons[0].offset = (count / 2) + '%';
-          line.set('icons', icons);
-          //$("#slider").slider("value", count);
+          line10.set('icons', icons);
+          $("#slider").slider("value", count);
+          }
           if (count >= 199){ 
             clearInterval(intervalForAnimation);
-            line1.setMap(null);
-          };
-        
-
+            clearTheLines();
+          };    
       }
 
-    }
+        function clearTheLines(){
+            for(var i = 0; i < lineArray1.length; i++){
+              line11 = lineArray1[i];
+              line11.setMap(null);
+            }
+        }
+
+    }   
 
     
     </script>
