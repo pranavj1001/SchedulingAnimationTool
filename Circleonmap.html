@@ -468,6 +468,65 @@
           population: 3714856
         }
       };*/
+      var timeForSecondLine = false;
+
+      //Our Second Line. Still a prototype.
+      window.setInterval(function(){
+           if(count >= 50){
+         timeForSecondLine = true;
+       }
+      }, 20);
+
+      if(timeForSecondLine){
+        callTheSecondLine();
+      }
+
+       function callTheSecondLine(){
+          var Line = new google.maps.Polyline({
+            //path to be set.
+              path: [{lat: 9.709057068618222, lng: 65.5224609375}, {lat: 7.100892668623654, lng: 58.9306640625}],
+              icons: [
+                {
+                  icon: symbolShape,
+                  offset: '0%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 0.0,
+              strokeWeight: 2,
+              map: map
+          });
+          line1 = new google.maps.Polyline({
+              path: [{lat: 9.709057068618222, lng: 65.5224609375}, {lat: 7.100892668623654, lng: 58.9306640625}],
+              icons: [
+                {
+                  icon: symbolSource,
+                  offset: '0%'
+                }, {
+                  icon: symbolDestination,
+                  offset: '100%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 1.0,
+              strokeWeight: 2,
+              map: map
+            });
+          animateCircle1(Line);
+       }
+
+       function animateCircle1(Line) {
+          var secondaryCount = 0;
+          window.setInterval(function() {
+            secondaryCount = (secondaryCount + 1) % 200;
+
+            var icons = Line.get('icons');
+            icons[0].offset = (secondaryCount / 2) + '%';
+            Line.set('icons', icons);
+        }, 20);
+      }
+
+
         // Construct the circle for each value in citymap.
         // Note: We scale the area of the circle based on the population.
           // Add the circle for this city to the map.
