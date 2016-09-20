@@ -202,6 +202,13 @@
       var line1;
       var lineArray = [];
       var lineArray1 = [];
+
+      var infowindow1;
+      var infowindow1Array = [];
+
+      var marker1;
+      var marker1Array = [];
+
       // This example adds an animated symbol to a polyline.
 
       function initMap() {
@@ -327,6 +334,13 @@
               map: map
             });
              lineArray[i] = line;
+
+            var infowindow1 = new google.maps.InfoWindow({
+              content:"Trial 1"
+            });
+
+            infowindow1Array[i] = infowindow1;
+             
             }
 
         for (var i = 0; i < DrivePath.length-1; i++) {
@@ -347,6 +361,7 @@
               map: map
             });
             lineArray1[i] = line1;
+
           }
 
             console.log(lineArray.length);
@@ -399,6 +414,14 @@
       // Use the DOM setInterval() function to change the offset of the symbol
       // at fixed intervals.
       function animateCircle(count) {
+
+          /*
+          infowindow1 = new google.maps.InfoWindow();
+          count1 = 0;
+          window.setInterval(function () {
+          count1 = (count1 + 1) % 200;
+          */
+
         for(var i = 0; i < lineArray.length; i++){
           line10 = lineArray[i];
           var icons = line10.get('icons');
@@ -411,7 +434,23 @@
             clearTheLines();
             motherShipLayer.setMap(null);
             //marker.setMap(null);
-          };    
+          };
+
+          /*
+          var position = google.maps.geometry.spherical.interpolate(lineCoordinates[0],         lineCoordinates[1], (count / 200));
+          if (!marker) {
+            marker = new google.maps.Marker({
+                position: position,
+                map: map
+            });
+            infowindow1.setContent(marker.getPosition().toUrlValue(6));
+            infowindow1.open(map,marker);
+          } else {
+            marker.setPosition(position);
+          }
+          infowindow1.setContent("hello");
+          }, 20);
+          */    
       }
 
         function clearTheLines(){
@@ -447,6 +486,7 @@
       //....layering part finished....//   
 
       //....Marker section....//
+      
         var marker=new google.maps.Marker({
           position:{lat: 8.8674, lng: 90.543},
           icon: {
@@ -461,8 +501,7 @@
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.open(map,marker);
           });
-
-
+      
     }   
 
     
