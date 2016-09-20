@@ -22,6 +22,7 @@
 
     <!-- Custom styles for this template -->
     <link href="css/custom.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -44,44 +45,33 @@
      ?>
 
 
-     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand page-scroll" href="index.php">Home</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav">
-                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                    <li class="hidden">
-                        <a class="page-scroll" href="#page-top"></a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#aboutInsertTechinicalPaperHere">About</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="https://www.facebook.com/atharvastechithon">Contact</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                  <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" style="font-size:25px;">S.A.T.</a>
+                  </div>
+                  <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                      <li><a href="#">Home</a></li>
+                      <li><a href="#">Contact</a></li>
+                      <li><a href="#">Sign Up</a></li>
+                    </ul>
+                  </div><!--/.nav-collapse -->
+                </div>
+              </div>
 
     <script src="/bundles/jquery?v=gkWyJthHPtwkFjvHuNinBjchIfwLwc_KbE-H26J2kAI1"></script>
 
     <script src="/bundles/kendo?v=PBgzo7RKPfMw26VTN1pQDBBAnrx6JcNPpZZMhUHbnxw1"></script>
 
 
-    <div class="container">
+    <div class="container" id="form">
 
       <form class="form-signin" method="post" action="newlog.php">
         <h2 class="form-signin-heading">Please sign in</h2>

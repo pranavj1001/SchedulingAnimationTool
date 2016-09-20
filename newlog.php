@@ -20,8 +20,8 @@
             return mysql_real_escape_string($str);
         }
         //Sanitize the POST values
-        $email = clean($_POST['email']);
-        $password = clean($_POST['password']);
+        $email = $_POST['email'];
+        $password = $_POST['password'];
      
         //Input Validations
         if($email == '') {
@@ -49,8 +49,15 @@
         if( $num_row ==1 )
          {
             $_SESSION['userid']=$row['userid'];
+            if ($email == "Administrator") {
                 header("Location: pageafterlogin.php");
-            exit;   
+            	exit;   
+            }
+            else
+            {
+            	header("Location: lastpage.php");
+            	exit;
+            }
         }
         else
         {

@@ -35,7 +35,7 @@
         $('.dropdown-toggle').dropdown();
           });
       </script>
-      <script>
+      <!--<script>
         $(function() {
         $("#slider").slider({
           max: 200,
@@ -48,7 +48,7 @@
           }
           });
         });
-      </script>
+      </script>-->
 
 
 
@@ -184,7 +184,25 @@
 
         var intervalForAnimation;
         var count = 0;
-        //var n = 0;
+        var n = 2;
+        var DrivePath = [
+          new google.maps.LatLng(37.772323, -122.214897),
+          new google.maps.LatLng(21.291982, -157.821856),
+          new google.maps.LatLng(-18.142599, 178.431),
+          new google.maps.LatLng(-27.46758, 153.027892),
+          new google.maps.LatLng(12.97918167,   77.6449),
+        ];
+        var Colors = [
+        "#FF0000", 
+        "#00FF00", 
+        "#0000FF", 
+        "#FFFFFF", 
+        "#000000", 
+        "#FFFF00", 
+        "#00FFFF", 
+        "#FF00FF"
+        ];
+
 
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 19.0760, lng: 72.8777},
@@ -233,7 +251,7 @@
         };
 
         // Create the polyline and add the symbol to it via the 'icons' property.
-        line = new google.maps.Polyline({
+        /*line = new google.maps.Polyline({
           path: [{lat: -33.918861, lng: 18.423300}, {lat: -35.842160, lng: 18.863525}, {lat: -39.170387, lng: 35.189209}, {lat: -26.331494, lng: 54.228516}, {lat: 0.462885, lng: 61.083984}, {lat: 19.075984, lng: 72.877656}],
           icons: [
             {
@@ -244,10 +262,10 @@
           strokeColor: '#0000FF ',
           strokeOpacity: 0,
           map: map
-        });
+        });*/
 
         //Our Secondary polyline for reseting purpose
-        var line1 = new google.maps.Polyline({
+        /*var line1 = new google.maps.Polyline({
           path: [{lat: -33.918861, lng: 18.423300}, {lat: -35.842160, lng: 18.863525}, {lat: -39.170387, lng: 35.189209}, {lat: -26.331494, lng: 54.228516}, {lat: 0.462885, lng: 61.083984}, {lat: 19.075984, lng: 72.877656}],
           icons: [
             {
@@ -261,7 +279,42 @@
           strokeColor: '#0000FF ',
           strokeOpacity: 0.8,
           map: map
-        });
+        });*/
+
+          for (var i = 0; i < DrivePath.length-1; i++) {
+            var line = new google.maps.Polyline({
+              path: [DrivePath[i], DrivePath[i+1]],
+              icons: [
+                {
+                  icon: symbolShape,
+                  offset: '0%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 0.0,
+              strokeWeight: 2,
+              map: map
+            });
+          }
+
+        for (var i = 0; i < DrivePath.length-1; i++) {
+            var line1 = new google.maps.Polyline({
+              path: [DrivePath[i], DrivePath[i+1]],
+              icons: [
+                {
+                  icon: symbolSource,
+                  offset: '0%'
+                }, {
+                  icon: symbolDestination,
+                  offset: '100%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 1.0,
+              strokeWeight: 2,
+              map: map
+            });
+          }
 
 
           //Map boundaries
@@ -269,72 +322,45 @@
             for (var i = 0; i < line.getPath().getLength(); i++) {
               bounds.extend(line.getPath().getAt(i));
             }
-          map.fitBounds(bounds);
+          //map.fitBounds(bounds);
 
-        /*function call(){
-          animateCircle(line);
-        }*/
 
-        //var dontSetAnotherPointer = 0;
-        function playing(i) {
-
-              //if(!ifPaused){
+        function playing() {
               intervalForAnimation = window.setInterval(function() {
-                  $("#map").after(animateCircle(line,count));
+                  $("#map").after(animateCircle(line,count,n));
                   count = (count+0.2) % 200;
-                  //i++;
-                  //pb.start(997);
-                  //pb.updateBar(i);
               }, 20);
-            //}
           }
 
-        //if(dontSetAnotherPointer == 0){
           $(".play").click(function() {
-              //dontSetAnotherPointer = 1;
-              //ifPaused = false;
-              //var i = 0;
-              playing(i);
-              //pb = new progressBar();
-              map.controls[google.maps.ControlPosition.RIGHT].push(pb.getDiv());
-
-              //pb.start(200);
-              //pb.updateBar(Math.ceil(Math.random()*10));
+              playing();
           });
-        //}
+
 
           $(".pause").click(function() {
               clearInterval(intervalForAnimation);
-              //ifPaused = true;
-              //dontSetAnotherPointer = 0;
+
           });
 
           $(".reset").click(function(){
               count = 0;
               line1.setMap(map);
-              //pb.hide();
           });
-          //animateCircle(line);
-          //removePoyline();
 
-          //ProgressBar Area
-
-          var pb;
 
       // Use the DOM setInterval() function to change the offset of the symbol
       // at fixed intervals.
-      function animateCircle(line,count) {
+      function animateCircle(line,count,n) {
           var icons = line.get('icons');
-          //if ((icons[0].offset <= 100 + '%')) {
           icons[0].offset = (count / 2) + '%';
           line.set('icons', icons);
-          $("#slider").slider("value", count);
+          //$("#slider").slider("value", count);
           if (count >= 199){ 
             clearInterval(intervalForAnimation);
             line1.setMap(null);
           };
-          //n++;
-        //};
+        
+
       }
 
     }

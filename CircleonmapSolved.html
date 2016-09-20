@@ -41,10 +41,13 @@
           max: 200,
           min: 0,
           change: function(event, ui) {
+          for(var i = 0;i < lineArray.length; i++){
           console.log("ui.value=" + ui.value);
-          var icons = line.get('icons');
+          line111 = lineArray[i];
+          var icons = line111.get('icons');
           icons[0].offset = (ui.value / 2) + '%';
-          line.set('icons', icons);
+          line111.set('icons', icons);
+          }
           }
           });
         });
@@ -150,7 +153,7 @@
       <a class="btn btn-default btn-sm play" alt="Play" title="Play">
       <i class="fa fa-play fa-lg" aria-hidden="true"></i></a>
     <!--Pause button-->
-      <a class="btn btn-default btn-sm pause" alt="Pause" title="Pause">
+      <a class="btn btn-default btn-sm pause" alt="Pause" title="Pause" style="display:none;">
       <i class="fa fa-pause fa-lg" aria-hidden="true"></i></a>
     <!--Reset and Stop button-->
       <a class="btn btn-default btn-sm reset" alt="Restart" title="Restart">
@@ -178,13 +181,33 @@
     <script>
       var line;
       var line1;
+      var lineArray = [];
+      var lineArray1 = [];
       // This example adds an animated symbol to a polyline.
 
       function initMap() {
 
         var intervalForAnimation;
         var count = 0;
-        //var n = 0;
+        var n = 2;
+        var DrivePath = [
+          new google.maps.LatLng(37.772323, -122.214897),
+          new google.maps.LatLng(21.291982, -157.821856),
+          new google.maps.LatLng(-18.142599, 178.431),
+          new google.maps.LatLng(-27.46758, 153.027892),
+          new google.maps.LatLng(12.97918167,   77.6449),
+        ];
+        var Colors = [
+        "#FF0000", 
+        "#00FF00", 
+        "#0000FF", 
+        "#FFFFFF", 
+        "#000000", 
+        "#FFFF00", 
+        "#00FFFF", 
+        "#FF00FF"
+        ];
+
 
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 19.0760, lng: 72.8777},
@@ -233,7 +256,7 @@
         };
 
         // Create the polyline and add the symbol to it via the 'icons' property.
-        line = new google.maps.Polyline({
+        /*line = new google.maps.Polyline({
           path: [{lat: -33.918861, lng: 18.423300}, {lat: -35.842160, lng: 18.863525}, {lat: -39.170387, lng: 35.189209}, {lat: -26.331494, lng: 54.228516}, {lat: 0.462885, lng: 61.083984}, {lat: 19.075984, lng: 72.877656}],
           icons: [
             {
@@ -244,10 +267,10 @@
           strokeColor: '#0000FF ',
           strokeOpacity: 0,
           map: map
-        });
+        });*/
 
         //Our Secondary polyline for reseting purpose
-        var line1 = new google.maps.Polyline({
+        /*var line1 = new google.maps.Polyline({
           path: [{lat: -33.918861, lng: 18.423300}, {lat: -35.842160, lng: 18.863525}, {lat: -39.170387, lng: 35.189209}, {lat: -26.331494, lng: 54.228516}, {lat: 0.462885, lng: 61.083984}, {lat: 19.075984, lng: 72.877656}],
           icons: [
             {
@@ -261,8 +284,47 @@
           strokeColor: '#0000FF ',
           strokeOpacity: 0.8,
           map: map
-        });
+        });*/
 
+          for (var i = 0; i < DrivePath.length-1; i++) {
+              var line = new google.maps.Polyline({
+              path: [DrivePath[i], DrivePath[i+1]],
+              icons: [
+                {
+                  icon: symbolShape,
+                  offset: '0%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 0.0,
+              strokeWeight: 2,
+              map: map
+            });
+             lineArray[i] = line;
+            }
+
+        for (var i = 0; i < DrivePath.length-1; i++) {
+            line1 = new google.maps.Polyline({
+              path: [DrivePath[i], DrivePath[i+1]],
+              icons: [
+                {
+                  icon: symbolSource,
+                  offset: '0%'
+                }, {
+                  icon: symbolDestination,
+                  offset: '100%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 1.0,
+              strokeWeight: 2,
+              map: map
+            });
+            lineArray1[i] = line1;
+          }
+
+            console.log(lineArray.length);
+            console.log(lineArray1.length);
 
           //Map boundaries
           var bounds = new google.maps.LatLngBounds();
@@ -271,73 +333,60 @@
             }
           map.fitBounds(bounds);
 
-        /*function call(){
-          animateCircle(line);
-        }*/
 
-        //var dontSetAnotherPointer = 0;
-        function playing(i) {
-
-              //if(!ifPaused){
+        function playing() {
               intervalForAnimation = window.setInterval(function() {
-                  $("#map").after(animateCircle(line,count));
+                  $("#map").after(animateCircle(count));
                   count = (count+0.2) % 200;
-                  //i++;
-                  //pb.start(997);
-                  //pb.updateBar(i);
               }, 20);
-            //}
           }
 
-        //if(dontSetAnotherPointer == 0){
           $(".play").click(function() {
-              //dontSetAnotherPointer = 1;
-              //ifPaused = false;
-              //var i = 0;
-              playing(i);
-              //pb = new progressBar();
-              map.controls[google.maps.ControlPosition.RIGHT].push(pb.getDiv());
-
-              //pb.start(200);
-              //pb.updateBar(Math.ceil(Math.random()*10));
+              playing();
+              $(this).hide();
+              $(".pause").show();
           });
-        //}
+
 
           $(".pause").click(function() {
               clearInterval(intervalForAnimation);
-              //ifPaused = true;
-              //dontSetAnotherPointer = 0;
+              $(this).hide();
+              $(".play").show();              
           });
 
           $(".reset").click(function(){
               count = 0;
-              line1.setMap(map);
-              //pb.hide();
+            for(var i = 0; i < lineArray1.length; i++){
+              line11 = lineArray1[i];
+              line11.setMap(map);
+            }
           });
-          //animateCircle(line);
-          //removePoyline();
 
-          //ProgressBar Area
-
-          var pb;
 
       // Use the DOM setInterval() function to change the offset of the symbol
       // at fixed intervals.
-      function animateCircle(line,count) {
-          var icons = line.get('icons');
-          //if ((icons[0].offset <= 100 + '%')) {
+      function animateCircle(count) {
+        for(var i = 0; i < lineArray.length; i++){
+          line10 = lineArray[i];
+          var icons = line10.get('icons');
           icons[0].offset = (count / 2) + '%';
-          line.set('icons', icons);
+          line10.set('icons', icons);
           $("#slider").slider("value", count);
+          }
           if (count >= 199){ 
             clearInterval(intervalForAnimation);
-            line1.setMap(null);
-          };
-          //n++;
-        //};
+            clearTheLines();
+          };    
       }
 
-    }
+        function clearTheLines(){
+            for(var i = 0; i < lineArray1.length; i++){
+              line11 = lineArray1[i];
+              line11.setMap(null);
+            }
+        }
+
+    }   
 
     
     </script>

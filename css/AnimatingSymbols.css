@@ -31,7 +31,7 @@ ul.nav{
 .control{
   display: inline-block;
 }
-.ui-widget {
+/*.ui-widget {
   font-family: Verdana,Arial,sans-serif;
   font-size: 0.8em !important;
   color: black !important;
@@ -46,7 +46,7 @@ ul.nav{
   border-bottom-right-radius: 10px !important;
 }
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-  background: rgb(63,81,181) 50% 50% repeat-x !important;
+  background: rgb(63,81,181) 50% 50% repeat-x;
 }
 .mdl-slider.is-upgraded {
     color: rgb(63,81,181) !important;
@@ -54,7 +54,7 @@ ul.nav{
 .ui-state-active>.ui-slider>.ui-slider-handle{
   width: 1.5em !important;
   height: 1.5em !important;
-}
+}*/
 
 /*Id's*/
 #map {

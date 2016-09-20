@@ -1,3 +1,9 @@
+<?php
+  session_start();
+  require 'connect.php';
+?>
+
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -47,29 +53,30 @@
         <!-- /.container -->
     </nav> 
   <div class="container_1">
-    <h2>Striped Rows</h2>
-    <table class="table table-striped">
+    <h2>Schedule Animation Tool</h2>
+  <?php
+    $result = mysqli_query($bd,"SELECT id,model_reference FROM project");
+
+echo '<table class = "table table-striped">
       <thead>
         <tr>
           <th>Project Name</th>
           <th>Project Number</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><a href="Circleonmap.html">First project</a></td>
-          <td>Doe</td>
-        </tr>
-        <tr>
-          <td><a href="Circleonmap.html">Mary</a></td>
-          <td>Moe</td>
-        </tr>
-        <tr>
-          <td><a href="Circleonmap.html">July</a></td>
-          <td>Dooley</td>
-        </tr>
-    </tbody>
-  </table>
+      <tbody>';
+
+while($row = mysqli_fetch_array($result))
+{
+echo "<tr>";
+echo "<td><a href=lastpage.php?id=".$row['id'].">" . $row['model_reference'] . "</a></td>";
+echo "<td>" . $row['id'] . "</td>";
+echo "</tr>";
+}
+echo "</tbody>
+</table>";
+
+?>
 </div>
 </body>
 <style type="text/css">

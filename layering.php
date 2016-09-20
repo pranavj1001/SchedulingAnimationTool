@@ -1,3 +1,16 @@
+<?php
+session_start();
+if(!isset($_SESSION['username']))
+    {
+      session_destroy();
+      header("Location: error.php");
+    }
+require 'connect.php';
+$id = $_GET['id'];
+?>
+
+
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -35,16 +48,43 @@
         $('.dropdown-toggle').dropdown();
           });
       </script>
+
+      <!-- Start and End dates -->
+      <?php
+        $result = mysqli_query($bd,"SELECT start_date FROM project WHERE id=".$id);
+        $locations = array();
+        while($row = mysqli_fetch_array($result)) {
+         array_push($locations, $row);
+           $start_date=strtotime($locations[0][0]);
+         }
+         $result = mysqli_query($bd,"SELECT end_date FROM project WHERE id=".$id);
+        $locations = array();
+        while($row = mysqli_fetch_array($result)) {
+         array_push($locations, $row);
+           $end_date=strtotime($locations[0][0]);
+         }
+     ?>
+
       <script>
+
+      var start_value = <?php echo json_encode($start_date,JSON_NUMERIC_CHECK); ?>;
+      var end_value = <?php echo json_encode($end_date,JSON_NUMERIC_CHECK); ?>;
+
+      // console.log(start_value);
+      // console.log(end_value);
+
         $(function() {
         $("#slider").slider({
           max: 200,
           min: 0,
           change: function(event, ui) {
+          for(var i = 0;i < lineArray.length; i++){
           console.log("ui.value=" + ui.value);
-          var icons = line.get('icons');
+          line111 = lineArray[i];
+          var icons = line111.get('icons');
           icons[0].offset = (ui.value / 2) + '%';
-          line.set('icons', icons);
+          line111.set('icons', icons);
+          }
           }
           });
         });
@@ -69,9 +109,9 @@
           </div>
          <div id="navbar" class="collapse navbar-collapse">
            <ul class="nav navbar-nav navbar-right">
-             <li><a href="#">Home</a></li>
-             <li><a href="#">Contact</a></li>
-             <li><a href="index.php">Logout</a></li>
+             <li><a href="pageafterlogin.php">Home</a></li>
+             <li><a href="http://techithon.in">Contact</a></li>
+             <li><a href="logout.php">Logout</a></li>
            </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -79,7 +119,14 @@
 
    <div class="container">
     <div class="headingAndDescription">
-      <h2>Subsea-Sea Tie In</h2>
+      <?php
+    $result = mysqli_query($bd,"SELECT model_reference FROM project WHERE id=".$id);
+    $locations = array();
+    while($row = mysqli_fetch_array($result)) {
+        array_push($locations, $row);
+        echo "<h2>" . $locations[0][0] . "</h2>";
+    }
+    ?>
     </div>
    </div>           
 
@@ -92,19 +139,47 @@
      <div class="row" id="row1">
       <div class="col-md-3">
         <h4>Project Number:</h4>
-        <p>001</p>
+        <?php
+        $result = mysqli_query($bd,"SELECT id FROM project WHERE id=".$id);
+        $locations = array();
+        while($row = mysqli_fetch_array($result)) {
+         array_push($locations, $row);
+           echo "<p>" . $locations[0][0] . "</p>";
+         }
+     ?>
       </div>
       <div class="col-md-3">
         <h4>From Date:</h4>
-        <p>5th October 2014</p>
+        <p>
+        <?php
+        $result = mysqli_query($bd,"SELECT start_date FROM project WHERE id=".$id);
+        $locations = array();
+        while($row = mysqli_fetch_array($result)) {
+         array_push($locations, $row);
+           echo "<p>" . $locations[0][0] . "</p>";
+           $start_date=strtotime($locations[0][0]);
+         }
+     ?>
       </div>
       <div class="col-md-3">
         <h4>To Date:</h4>
-        <p>29th December 2014</p>
+              <?php
+        $result = mysqli_query($bd,"SELECT end_date FROM project WHERE id=".$id);
+        $locations = array();
+        while($row = mysqli_fetch_array($result)) {
+         array_push($locations, $row);
+           echo "<p>" . $locations[0][0] . "</p>";
+           $end_date=strtotime($locations[0][0]);
+         }
+     ?>
       </div>
       <div class="col-md-3">
        <h4>Duration:</h4>
-       <p>2040 hours</p>
+<?php
+
+      $interval = $end_date - $start_date;
+      echo "<p>" . $interval/3600 . "</p>";
+     ?>
       </div>
      </div>
     </div>
@@ -150,13 +225,12 @@
       <a class="btn btn-default btn-sm play" alt="Play" title="Play">
       <i class="fa fa-play fa-lg" aria-hidden="true"></i></a>
     <!--Pause button-->
-      <a class="btn btn-default btn-sm pause" alt="Pause" title="Pause">
+      <a class="btn btn-default btn-sm pause" alt="Pause" title="Pause" style="display:none;">
       <i class="fa fa-pause fa-lg" aria-hidden="true"></i></a>
     <!--Reset and Stop button-->
       <a class="btn btn-default btn-sm reset" alt="Restart" title="Restart">
       <i class="fa fa-repeat fa-lg" aria-hidden="true"></i></a>
-      <div style="border: 1px solid black; background-color: green; padding: 5px;">
-      slider
+      <div style="border: 1px solid black; background-color: black; padding: 5px;">
       <div id="slider"></div>
       </div>
 
@@ -174,17 +248,60 @@
       </div>
     </footer>
 
-    <script type="text/javascript" src="js/progressBar.js"></script>
+    <?php
+    $result = mysqli_query($bd,"SELECT * FROM ship WHERE id=".$id);
+    $locations = array();
+    while($row = mysqli_fetch_array($result)) {
+        array_push($locations, $row);
+    }
+    $nrows = mysqli_num_rows($result);
+?>
+
+
     <script>
+
+//Initialization Of Data From DB
+    var nrows = <?php echo json_encode($nrows,JSON_NUMERIC_CHECK);?>;
+    var locMatrix = <?php echo json_encode($locations,JSON_NUMERIC_CHECK);?>;
+    
+
       var line;
       var line1;
+      var lineArray = [];
+      var lineArray1 = [];
+      var DrivePath = [];
       // This example adds an animated symbol to a polyline.
 
       function initMap() {
 
         var intervalForAnimation;
         var count = 0;
-        //var n = 0;
+        var n = 2;
+        // var DrivePath = [
+        //   new google.maps.LatLng(37.772323, -122.214897),
+        //   new google.maps.LatLng(21.291982, -157.821856),
+        //   new google.maps.LatLng(-18.142599, 178.431),
+        //   new google.maps.LatLng(-27.46758, 153.027892),
+        //   new google.maps.LatLng(12.97918167,   77.6449),
+        // ];
+        for(var i=0;i<=nrows-1;i++)
+        {
+        console.log(DrivePath[i]);
+        DrivePath.push(new google.maps.LatLng(locMatrix[i][0], locMatrix[i][1]),
+                  new google.maps.LatLng(17.8674, 66.543),
+                  new google.maps.LatLng(locMatrix[i][2], locMatrix[i][3]));
+      }
+        var Colors = [
+        "#FF0000", 
+        "#00FF00", 
+        "#0000FF", 
+        "#FFFFFF", 
+        "#000000", 
+        "#FFFF00", 
+        "#00FFFF", 
+        "#FF00FF"
+        ];
+
 
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 19.0760, lng: 72.8777},
@@ -233,7 +350,7 @@
         };
 
         // Create the polyline and add the symbol to it via the 'icons' property.
-        line = new google.maps.Polyline({
+        /*line = new google.maps.Polyline({
           path: [{lat: -33.918861, lng: 18.423300}, {lat: -35.842160, lng: 18.863525}, {lat: -39.170387, lng: 35.189209}, {lat: -26.331494, lng: 54.228516}, {lat: 0.462885, lng: 61.083984}, {lat: 19.075984, lng: 72.877656}],
           icons: [
             {
@@ -244,10 +361,10 @@
           strokeColor: '#0000FF ',
           strokeOpacity: 0,
           map: map
-        });
+        });*/
 
         //Our Secondary polyline for reseting purpose
-        var line1 = new google.maps.Polyline({
+        /*var line1 = new google.maps.Polyline({
           path: [{lat: -33.918861, lng: 18.423300}, {lat: -35.842160, lng: 18.863525}, {lat: -39.170387, lng: 35.189209}, {lat: -26.331494, lng: 54.228516}, {lat: 0.462885, lng: 61.083984}, {lat: 19.075984, lng: 72.877656}],
           icons: [
             {
@@ -261,8 +378,47 @@
           strokeColor: '#0000FF ',
           strokeOpacity: 0.8,
           map: map
-        });
+        });*/
 
+          for (var i = 0; i < DrivePath.length-1; i++) {
+              var line = new google.maps.Polyline({
+              path: [DrivePath[i], DrivePath[i+1]],
+              icons: [
+                {
+                  icon: symbolShape,
+                  offset: '0%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 0.0,
+              strokeWeight: 2,
+              map: map
+            });
+             lineArray[i] = line;
+            }
+
+        for (var i = 0; i < DrivePath.length-1; i++) {
+            line1 = new google.maps.Polyline({
+              path: [DrivePath[i], DrivePath[i+1]],
+              icons: [
+                {
+                  icon: symbolSource,
+                  offset: '0%'
+                }, {
+                  icon: symbolDestination,
+                  offset: '100%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 1.0,
+              strokeWeight: 2,
+              map: map
+            });
+            lineArray1[i] = line1;
+          }
+
+            console.log(lineArray.length);
+            console.log(lineArray1.length);
 
           //Map boundaries
           var bounds = new google.maps.LatLngBounds();
@@ -271,74 +427,102 @@
             }
           map.fitBounds(bounds);
 
-        /*function call(){
-          animateCircle(line);
-        }*/
 
-        //var dontSetAnotherPointer = 0;
-        function playing(i) {
-
-              //if(!ifPaused){
+        function playing() {
               intervalForAnimation = window.setInterval(function() {
-                  $("#map").after(animateCircle(line,count));
-                  count = (count+0.2) % 200;
-                  //i++;
-                  //pb.start(997);
-                  //pb.updateBar(i);
+                  $("#map").after(animateCircle(count));
+                  count = (count+1) % 200;
               }, 20);
-            //}
           }
 
-        //if(dontSetAnotherPointer == 0){
           $(".play").click(function() {
-              //dontSetAnotherPointer = 1;
-              //ifPaused = false;
-              //var i = 0;
-              playing(i);
-              //pb = new progressBar();
-              map.controls[google.maps.ControlPosition.RIGHT].push(pb.getDiv());
-
-              //pb.start(200);
-              //pb.updateBar(Math.ceil(Math.random()*10));
+              playing();
+              $(this).hide();
+              $(".pause").show();
           });
-        //}
+
 
           $(".pause").click(function() {
               clearInterval(intervalForAnimation);
-              //ifPaused = true;
-              //dontSetAnotherPointer = 0;
+              $(this).hide();
+              $(".play").show();              
           });
 
           $(".reset").click(function(){
               count = 0;
-              line1.setMap(map);
-              //pb.hide();
+            for(var i = 0; i < lineArray1.length; i++){
+              line11 = lineArray1[i];
+              line11.setMap(map);
+            }
           });
-          //animateCircle(line);
-          //removePoyline();
 
-          //ProgressBar Area
-
-          var pb;
 
       // Use the DOM setInterval() function to change the offset of the symbol
       // at fixed intervals.
-      function animateCircle(line,count) {
-          var icons = line.get('icons');
-          //if ((icons[0].offset <= 100 + '%')) {
+      function animateCircle(count) {
+        for(var i = 0; i < lineArray.length; i++){
+          line10 = lineArray[i];
+          var icons = line10.get('icons');
           icons[0].offset = (count / 2) + '%';
-          line.set('icons', icons);
+          line10.set('icons', icons);
           $("#slider").slider("value", count);
+          }
           if (count >= 199){ 
             clearInterval(intervalForAnimation);
-            line1.setMap(null);
-          };
-          //n++;
-        //};
+            clearTheLines();
+          };    
       }
 
-    }
+        function clearTheLines(){
+            for(var i = 0; i < lineArray1.length; i++){
+              line11 = lineArray1[i];
+              line11.setMap(null);
+            }
+        }
 
+      //Layering part
+
+      var citymap = {
+        chicago: {
+          center: {lat: 17.8674, lng: 66.543},
+          population: 3714856
+        }
+      };
+        // Construct the circle for each value in citymap.
+        // Note: We scale the area of the circle based on the population.
+        for (var city in citymap) {
+          // Add the circle for this city to the map.
+          var cityCircle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: map,
+            center: citymap[city].center,
+            radius: Math.sqrt(citymap[city].population) * 100
+          });
+        } 
+      // Remove custom styles.
+      // map.data.setStyle({});  
+      //....layering part finished....//   
+
+      //....Marker section....//
+        var marker=new google.maps.Marker({
+          position:{lat: 17.8674, lng: 66.543},
+          });
+
+        marker.setMap(map);
+
+        var infowindow = new google.maps.InfoWindow({
+          content:"Hello World!"
+          });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map,marker);
+          });
+      //....Marker section complete...//
+    }   
     
     </script>
     <!--<script type="text/javascript">
