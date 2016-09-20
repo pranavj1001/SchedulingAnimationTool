@@ -156,20 +156,31 @@
       <hr class="hrRow" id="lineHr3"></hr>
       <h3>Map with our complete Route System:</h3>
     <!--Play button-->
+    <div class="control">
       <a class="btn btn-default btn-sm play control" alt="Play" title="Play">
       <i class="fa fa-play fa-lg" aria-hidden="true"></i></a>
+    </div>
     <!--Pause button-->
+    <div class="control">
       <a class="btn btn-default btn-sm pause control" alt="Pause" title="Pause" style="display:none;">
       <i class="fa fa-pause fa-lg" aria-hidden="true"></i></a>
+    </div>
     <!--Reset and Stop button-->
+    <div class="control">
       <a class="btn btn-default btn-sm reset control" alt="Restart" title="Restart">
       <i class="fa fa-repeat fa-lg" aria-hidden="true"></i></a>
-      <!--<div style="border: 1px solid black; background-color: green; padding: 5px;">
-      slider
+    </div>
+    <!--Fast Forward and Reach End button-->
+    <div class="control">
+      <a class="btn btn-default btn-sm end control" alt="Reach End" title="Reach End">
+      <i class="fa fa-fast-forward fa-lg" aria-hidden="true"></i></a>
+    </div>    
+
+      <div style= "padding: 5px;">
       <div id="slider"></div>
-      </div>-->
-      <div id="slider" class="mdl-slider mdl-js-slider slider control" type="range"
-        min="0" max="100" value="0" tabindex="0"></div>
+      </div>
+      <!--<div id="slider" class="mdl-slider mdl-js-slider slider control" type="range"
+        min="0" max="100" value="0" tabindex="0"></div>-->
 
 <!--<button type="button" class="play">Play</button>
       <input type="button" value="updateBar()" onclick="updateBar()" />
@@ -253,13 +264,21 @@
         var symbolShape = {
           path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
           strokeColor: '#0000FF',
-          strokeOpacity: 1.0
+          strokeOpacity: 1.0,
+          title: 'Uluru (Ayers Rock)'
         };
 
         var symbolDestination = {
           path: 'M -2,-2 2,2 M 2,-2 -2,2',
           strokeColor: '#292',
           strokeWeight: 4
+        };
+
+        var symbolMotherShip = {
+          path: google.maps.SymbolPath.CIRCLE,
+          strokeColor: '#0000FF',
+          strokeOpacity: 1.0,
+          center: {lat: 8.8674, lng: 90.543}
         };
 
         // Create the polyline and add the symbol to it via the 'icons' property.
@@ -350,6 +369,8 @@
 
           $(".play").click(function() {
               playing();
+              marker.setMap(map);
+              motherShipLayer.setMap(map);
               $(this).hide();
               $(".pause").show();
           });
@@ -363,10 +384,15 @@
 
           $(".reset").click(function(){
               count = 0;
+              motherShipLayer.setMap(map);
             for(var i = 0; i < lineArray1.length; i++){
               line11 = lineArray1[i];
               line11.setMap(map);
             }
+          });
+
+          $(".end").click(function(){
+            count = 200;
           });
 
 
@@ -383,6 +409,8 @@
           if (count >= 199){ 
             clearInterval(intervalForAnimation);
             clearTheLines();
+            motherShipLayer.setMap(null);
+            //marker.setMap(null);
           };    
       }
 
@@ -392,6 +420,48 @@
               line11.setMap(null);
             }
         }
+
+    //Layering part
+
+      /*var citymap = {
+        chicago: {
+          center: {lat: 17.8674, lng: 66.543},
+          population: 3714856
+        }
+      };*/
+        // Construct the circle for each value in citymap.
+        // Note: We scale the area of the circle based on the population.
+          // Add the circle for this city to the map.
+          var motherShipLayer = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            //map: map,
+            center: {lat: 8.8674, lng: 90.543},
+            radius: 500000
+          });
+      // Remove custom styles.
+      // map.data.setStyle({});  
+      //....layering part finished....//   
+
+      //....Marker section....//
+        var marker=new google.maps.Marker({
+          position:{lat: 8.8674, lng: 90.543},
+          icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 5 }
+          });
+
+        var infowindow = new google.maps.InfoWindow({
+          content:"Mother Ship(not Russia), Happy? jk"
+          });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map,marker);
+          });
+
 
     }   
 
