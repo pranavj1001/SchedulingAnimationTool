@@ -13,6 +13,15 @@ html, body {
 .hrStyle{
   width: 100%;
 }
+.floating-box{
+	display: inline-block;
+}
+/*.floating-box p{
+	margin-left: 1000px;
+}*/
+#buttton1{
+	margin-left: 923px;
+}
 
 /*Id's*/
 #map {
@@ -20,4 +29,16 @@ html, body {
 }
 #row2{
   margin-bottom: 50px;
+}
+#rightOfFooter{
+	float: right;
+}
+
+footer{
+    background-color: black;
+    padding-top: 150px;
+    padding-bottom: 30px;
+	position:relative;
+	color: white;
+	margin-top: 50px;
 }
