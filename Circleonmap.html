@@ -156,20 +156,20 @@
       <hr class="hrRow" id="lineHr3"></hr>
       <h3>Map with our complete Route System:</h3>
     <!--Play button-->
-      <a class="btn btn-default btn-sm play" alt="Play" title="Play">
+      <a class="btn btn-default btn-sm play control" alt="Play" title="Play">
       <i class="fa fa-play fa-lg" aria-hidden="true"></i></a>
     <!--Pause button-->
-      <a class="btn btn-default btn-sm pause" alt="Pause" title="Pause" style="display:none;">
+      <a class="btn btn-default btn-sm pause control" alt="Pause" title="Pause" style="display:none;">
       <i class="fa fa-pause fa-lg" aria-hidden="true"></i></a>
     <!--Reset and Stop button-->
-      <a class="btn btn-default btn-sm reset" alt="Restart" title="Restart">
+      <a class="btn btn-default btn-sm reset control" alt="Restart" title="Restart">
       <i class="fa fa-repeat fa-lg" aria-hidden="true"></i></a>
-      <div style="border: 1px solid black; background-color: green; padding: 5px;">
+      <!--<div style="border: 1px solid black; background-color: green; padding: 5px;">
       slider
       <div id="slider"></div>
-      </div>
-      <input class="mdl-slider mdl-js-slider" type="range"
-        min="0" max="100" value="0" tabindex="0">
+      </div>-->
+      <div id="slider" class="mdl-slider mdl-js-slider slider control" type="range"
+        min="0" max="100" value="0" tabindex="0"></div>
 
 <!--<button type="button" class="play">Play</button>
       <input type="button" value="updateBar()" onclick="updateBar()" />
