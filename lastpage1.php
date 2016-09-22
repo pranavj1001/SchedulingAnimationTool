@@ -296,8 +296,17 @@ $e_date = $_GET['e_date'];
       var lineArray1 = [];
       var DrivePath = [];
       var count = 0;
-      var secondaryCount = 0;
       var secondInningsVar = false;
+
+      var interval;
+      var intervalForAnimation;
+      var intervalForSecondAnimation;
+      var secondaryCount = 0;
+      var timeForSecondLine = false;
+      var Line12345;
+      var Line112345;
+      var secondaryCount = 0;
+
       // This example adds an animated symbol to a polyline.
 
       function initMap() {
@@ -315,6 +324,7 @@ $e_date = $_GET['e_date'];
           for(var i=0;i<=nrows-1;i++)
           {
             if(check == 0){
+              DrivePath = [];
               DrivePath.push(new google.maps.LatLng(locMatrix[i][1], locMatrix[i][2]),
                         new google.maps.LatLng(17.8674, 66.543));
             }
@@ -455,9 +465,20 @@ $e_date = $_GET['e_date'];
                   $("#map").after(animateCircle(count));
                   count = (count+0.2) % 200;
               }, 20);
+              //secondLine Code.
+              interval = window.setInterval(function(){
+              if(!timeForSecondLine){
+                if(count >= 50){
+                   timeForSecondLine = true;
+                   callTheSecondLine();
+                }
+              }
+              }, 20);
           }
 
           $(".play").click(function() {
+              //secondLine.
+              timeForSecondLine = false;
               playing();
               marker.setMap(map);
               motherShipLayer.setMap(map);
@@ -469,11 +490,23 @@ $e_date = $_GET['e_date'];
           $(".pause").click(function() {
               clearInterval(intervalForAnimation);
               $(this).hide();
-              $(".play").show();              
+              $(".play").show();
+              //secondLine Code.
+              clearInterval(intervalForSecondAnimation);              
           });
 
           $(".reset").click(function(){
               count = 0;
+              check = 0;
+              insertValues(check);
+              fitThePaths();
+              //secondLine Code
+              Line12345.setMap(null);
+              secondLine();
+              secondaryCount = 0;
+              timeForSecondLine = false;
+              Line112345.setMap(map);
+              //-----------------//
               motherShipLayer.setMap(map);
             for(var i = 0; i < lineArray1.length; i++){
               line11 = lineArray1[i];
@@ -483,6 +516,7 @@ $e_date = $_GET['e_date'];
 
           $(".end").click(function(){
             count = 200;
+            secondaryCount = 200;
           });
 
 
@@ -508,16 +542,12 @@ $e_date = $_GET['e_date'];
       }
 
       function secondInnings(){
-        for(var i = 0; i < lineArray.length; i++){
-              line11 = lineArray[i];
-              line11.setMap(null);
-        }
         check = 1;
         insertValues(check);
         fitThePaths();
         //map.fitBounds(bounds);
         count = 0;
-        motherShipLayer.setMap(map);
+        //motherShipLayer.setMap(map);
         for(var i = 0; i < lineArray1.length; i++){
           line11 = lineArray1[i];
           line11.setMap(map);
@@ -535,40 +565,62 @@ $e_date = $_GET['e_date'];
       }
 
 
-      //Our Second Line. Still a prototype.
-       if(count == 50){
-         callTheSecondLine();
-       }
+      //Second Line
 
-       function callTheSecondLine(){
-          var line = new google.maps.Polyline({
+      function secondLine(){
+      Line12345 = new google.maps.Polyline({
             //path to be set.
-              path: [DrivePath[i], DrivePath[i+1]],
+              path: [{lat: 9.709057068618222, lng: 65.5224609375}, {lat: 7.100892668623654, lng: 58.9306640625}],
               icons: [
                 {
                   icon: symbolShape,
                   offset: '0%'
                 }
               ],
-              strokeColor: Colors[i],
+              strokeColor: '#fff',
               strokeOpacity: 0.0,
               strokeWeight: 2,
               map: map
           });
-          animateCircle1(line);
-       }
+      Line112345 = new google.maps.Polyline({
+              path: [{lat: 9.709057068618222, lng: 65.5224609375}, {lat: 7.100892668623654, lng: 58.9306640625}],
+              icons: [
+                {
+                  icon: symbolSource,
+                  offset: '0%'
+                }, {
+                  icon: symbolDestination,
+                  offset: '100%'
+                }
+              ],
+              strokeColor: '#fff',
+              strokeOpacity: 1.0,
+              strokeWeight: 2,
+              map: map
+        });
+    }
 
-       function animateCircle1(line) {
-          var count = 0;
-          window.setInterval(function() {
-            count = (count + 1) % 200;
+    secondLine();
 
-            var icons = line.get('icons');
-            icons[0].offset = (count / 2) + '%';
-            line.set('icons', icons);
-        }, 20);
+    function callTheSecondLine(){
+        clearInterval(interval);
+        timeForSecondLine = true;
+          intervalForSecondAnimation = window.setInterval(function() {
+            animateCircle1(Line12345);
+          }, 20);
+    }
+
+    function animateCircle1(Line12345) {
+            secondaryCount = (secondaryCount + 1) % 200;
+            var icons = Line12345.get('icons');
+            icons[0].offset = (secondaryCount / 2) + '%';
+            Line12345.set('icons', icons);
+            if(secondaryCount >= 199){
+              clearInterval(intervalForSecondAnimation);
+              Line112345.setMap(null);
+            }
       }
-
+   
     // Construct the circle for each value in citymap.
         // Note: We scale the area of the circle based on the population.
           // Add the circle for this city to the map.
@@ -582,6 +634,10 @@ $e_date = $_GET['e_date'];
             center: {lat: m_ship[0][1], lng: m_ship[0][2]},
             radius: 500000
           });
+
+
+
+      
 
       // Remove custom styles.
       // map.data.setStyle({});  

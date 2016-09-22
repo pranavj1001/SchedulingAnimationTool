@@ -1,6 +1,11 @@
 <?php
         //Start session
         session_start();
+        if(isset($_SESSION['username']))
+    {
+      session_destroy();
+      header("Location: error.php");
+    }
      
         //Include database connection details
         require_once('connect.php');
@@ -48,7 +53,7 @@
         $row=mysqli_fetch_array($result);
         if( $num_row ==1 )
          {
-            $_SESSION['userid']=$row['userid'];
+            $_SESSION['username']=$row['email'];
             if ($email == "Administrator") {
                 header("Location: pageafterlogin.php");
             	exit;   
@@ -61,6 +66,6 @@
         }
         else
         {
-            echo 'oops  can not do it';
+            header("Location: logout.php");
         }
 ?>

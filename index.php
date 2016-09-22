@@ -1,5 +1,10 @@
 <?php  
     session_start();
+    if(isset($_SESSION['username']))
+    {
+      session_destroy();
+      header("Location: error.php");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,9 +63,8 @@
                   </div>
                   <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                      <li><a href="#">Home</a></li>
-                      <li><a href="#">Contact</a></li>
-                      <li><a href="#">Sign Up</a></li>
+                      <li><a href="index.php">Home</a></li>
+                      <li><a href="http://techithon.in/">Contact</a></li>
                     </ul>
                   </div><!--/.nav-collapse -->
                 </div>
@@ -75,8 +79,8 @@
 
       <form class="form-signin" method="post" action="newlog.php">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="text" id="inputEmail" class="form-control" placeholder="Email address" required autofocus name="email">
+        <label for="inputEmail" class="sr-only">Username</label>
+        <input type="text" id="inputEmail" class="form-control" placeholder="Username" required autofocus name="email">
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password">
         <div class="checkbox">
