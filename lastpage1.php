@@ -648,7 +648,11 @@ $e_date = $_GET['e_date'];
                 }
               ],
               strokeColor: '#ff0',
+<<<<<<< HEAD
               strokeOpacity: 0.0,
+=======
+              strokeOpacity: 1.0,
+>>>>>>> origin/master
               strokeWeight: 2,
               map: map
         });
