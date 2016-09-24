@@ -408,22 +408,6 @@ $e_date = $_GET['e_date'];
         };
 
         function fitThePaths(){
-          for (var i = 0; i < DrivePath.length-1; i++) {
-              var line = new google.maps.Polyline({
-              path: [DrivePath[i], DrivePath[i+1]],
-              icons: [
-                {
-                  icon: symbolShape,
-                  offset: '0%'
-                }
-              ],
-              strokeColor: Colors[i],
-              strokeOpacity: 0.0,
-              strokeWeight: 2,
-              map: map
-            });
-             lineArray[i] = line;
-            }
 
           for (var i = 0; i < DrivePath.length-1; i++) {
             line1 = new google.maps.Polyline({
@@ -444,6 +428,25 @@ $e_date = $_GET['e_date'];
             });
             lineArray1[i] = line1;
           }
+
+
+          for (var i = 0; i < DrivePath.length-1; i++) {
+              var line = new google.maps.Polyline({
+              path: [DrivePath[i], DrivePath[i+1]],
+              icons: [
+                {
+                  icon: symbolShape,
+                  offset: '0%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 0.0,
+              strokeWeight: 2,
+              map: map
+            });
+             lineArray[i] = line;
+            }
+
         }
 
             fitThePaths();
@@ -632,7 +635,7 @@ $e_date = $_GET['e_date'];
                 }
               ],
               strokeColor: '#fff',
-              strokeOpacity: 1.0,
+              strokeOpacity: 0.0,
               strokeWeight: 2,
               map: map
         });
@@ -648,11 +651,7 @@ $e_date = $_GET['e_date'];
                 }
               ],
               strokeColor: '#ff0',
-<<<<<<< HEAD
               strokeOpacity: 0.0,
-=======
-              strokeOpacity: 1.0,
->>>>>>> origin/master
               strokeWeight: 2,
               map: map
         });

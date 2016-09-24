@@ -20,7 +20,7 @@
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/pageafter1.css" rel="stylesheet">
+        <link href="css/AnimatingSymbols.css" rel="stylesheet">
         <title>Project List</title>
     <!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
@@ -50,7 +50,7 @@
 
 
 
-  <div class="container_1">
+  <div class="container">
     <h2>Schedule Animation Tool</h2>
   <?php
     $result = mysqli_query($bd,"SELECT id,model_reference,start_date,end_date FROM project");
@@ -82,6 +82,26 @@ echo "</tbody>
         <p style="display:inline-block; float:right;"><input type="checkbox" id="nightMode">NightMode</p>
       </div>
     </footer>
+
+    <script type="text/javascript">
+    function prepareNightMode(){
+      if(document.getElementById("nightMode").checked){
+        document.body.style.backgroundColor = "gray";
+        document.getElementById("lineHr1").style.borderColor = "black";
+        document.getElementById("lineHr2").style.borderColor = "black";
+        document.getElementById("lineHr3").style.borderColor = "black";
+      }else{
+        document.body.style.backgroundColor = "white";
+        document.getElementById("lineHr1").style.borderColor = "gray";
+        document.getElementById("lineHr2").style.borderColor = "gray";
+        document.getElementById("lineHr3").style.borderColor = "gray"; 
+      }
+    }
+    window.onload = function(){
+      setInterval(prepareNightMode,50);
+    }
+    </script>
+    
 </body>
 <style type="text/css">
     .container_1{
