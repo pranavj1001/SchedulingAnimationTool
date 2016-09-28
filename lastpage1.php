@@ -306,7 +306,6 @@ $e_date = $_GET['e_date'];
       var Line12345;
       var Line112345;
       var secondaryCount = 0;
-      var lineIsOn = false;
 
       // This example adds an animated symbol to a polyline.
 
@@ -408,6 +407,22 @@ $e_date = $_GET['e_date'];
         };
 
         function fitThePaths(){
+          for (var i = 0; i < DrivePath.length-1; i++) {
+              var line = new google.maps.Polyline({
+              path: [DrivePath[i], DrivePath[i+1]],
+              icons: [
+                {
+                  icon: symbolShape,
+                  offset: '0%'
+                }
+              ],
+              strokeColor: Colors[i],
+              strokeOpacity: 0.0,
+              strokeWeight: 2,
+              map: map
+            });
+             lineArray[i] = line;
+            }
 
           for (var i = 0; i < DrivePath.length-1; i++) {
             line1 = new google.maps.Polyline({
@@ -428,25 +443,6 @@ $e_date = $_GET['e_date'];
             });
             lineArray1[i] = line1;
           }
-
-
-          for (var i = 0; i < DrivePath.length-1; i++) {
-              var line = new google.maps.Polyline({
-              path: [DrivePath[i], DrivePath[i+1]],
-              icons: [
-                {
-                  icon: symbolShape,
-                  offset: '0%'
-                }
-              ],
-              strokeColor: Colors[i],
-              strokeOpacity: 0.0,
-              strokeWeight: 2,
-              map: map
-            });
-             lineArray[i] = line;
-            }
-
         }
 
             fitThePaths();
@@ -465,7 +461,6 @@ $e_date = $_GET['e_date'];
 
 
         function playing() {
-
               intervalForAnimation = window.setInterval(function() {
                   $("#map").after(animateCircle(count));
                   count = (count+0.2) % 200;
@@ -476,9 +471,6 @@ $e_date = $_GET['e_date'];
                 if(count >= 50){
                    timeForSecondLine = true;
                    callTheSecondLine();
-                   if(!lineIsOn){
-                    setPathForSecondLine();
-                   }
                 }
               }
               }, 20);
@@ -542,11 +534,7 @@ $e_date = $_GET['e_date'];
             clearInterval(intervalForAnimation);
             clearTheLines();
             motherShipLayer.setMap(null);
-              if(!secondInningsVar){
-                for(var i = 0; i < lineArray1.length; i++){
-                line1 = lineArray[i];
-                line1.setMap(null);
-              }
+            if(!secondInningsVar){
               secondInningsVar = true;
               secondInnings();
             }
@@ -582,7 +570,7 @@ $e_date = $_GET['e_date'];
       function secondLine(){
       Line12345 = new google.maps.Polyline({
             //path to be set.
-              path: [{lat: 17.283512740286877, lng: 68.983154296875}, {lat: 15.614571795073996, lng: 63.65478515625}],
+              path: [{lat: 9.709057068618222, lng: 65.5224609375}, {lat: 7.100892668623654, lng: 58.9306640625}],
               icons: [
                 {
                   icon: symbolShape,
@@ -594,20 +582,22 @@ $e_date = $_GET['e_date'];
               strokeWeight: 2,
               map: map
           });
-      Line1234 = new google.maps.Polyline({
-            //path to be set.
-              path: [{lat: 19.758431643708196, lng: 68.13720703125}, {lat: m_ship[0][1], lng: m_ship[0][2]}],
+      Line112345 = new google.maps.Polyline({
+              path: [{lat: 9.709057068618222, lng: 65.5224609375}, {lat: 7.100892668623654, lng: 58.9306640625}],
               icons: [
                 {
-                  icon: symbolShape,
+                  icon: symbolSource,
                   offset: '0%'
+                }, {
+                  icon: symbolDestination,
+                  offset: '100%'
                 }
               ],
               strokeColor: '#fff',
-              strokeOpacity: 0.0,
+              strokeOpacity: 1.0,
               strokeWeight: 2,
               map: map
-          });
+        });
     }
 
     secondLine();
@@ -616,60 +606,18 @@ $e_date = $_GET['e_date'];
         clearInterval(interval);
         timeForSecondLine = true;
           intervalForSecondAnimation = window.setInterval(function() {
-            animateCircle1(Line12345,Line1234);
-            secondaryCount = (secondaryCount + 1) % 200;
+            animateCircle1(Line12345);
           }, 20);
     }
 
-    function setPathForSecondLine(){
-              lineIsOn = true;
-              Line112345 = new google.maps.Polyline({
-              path: [{lat: 17.283512740286877, lng: 68.983154296875}, {lat: 15.614571795073996, lng: 63.65478515625}],
-              icons: [
-                {
-                  icon: symbolSource,
-                  offset: '0%'
-                }, {
-                  icon: symbolDestination,
-                  offset: '100%'
-                }
-              ],
-              strokeColor: '#fff',
-              strokeOpacity: 0.0,
-              strokeWeight: 2,
-              map: map
-        });
-        Line11234 = new google.maps.Polyline({
-              path: [{lat: 19.758431643708196, lng: 68.13720703125}, {lat: m_ship[0][1], lng: m_ship[0][2]}],
-              icons: [
-                {
-                  icon: symbolSource,
-                  offset: '0%'
-                }, {
-                  icon: symbolDestination,
-                  offset: '100%'
-                }
-              ],
-              strokeColor: '#ff0',
-              strokeOpacity: 0.0,
-              strokeWeight: 2,
-              map: map
-        });
-    }
-
-    function animateCircle1(Line12345,Line1234) {
-            
+    function animateCircle1(Line12345) {
+            secondaryCount = (secondaryCount + 1) % 200;
             var icons = Line12345.get('icons');
             icons[0].offset = (secondaryCount / 2) + '%';
             Line12345.set('icons', icons);
-            var icons1 = Line1234.get('icons');
-            icons1[0].offset = (secondaryCount / 2) + '%';
-            Line1234.set('icons', icons1);
             if(secondaryCount >= 199){
               clearInterval(intervalForSecondAnimation);
               Line112345.setMap(null);
-              Line11234.setMap(null);
-              lineIsOn = false;
             }
       }
    

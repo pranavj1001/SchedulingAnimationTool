@@ -18,9 +18,11 @@
      <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+        <link rel="stylesheet" href="font-awesome-4.5.0/css/font-awesome.min.css">
+        <link href="css/template.css" rel="stylesheet">
+
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/AnimatingSymbols.css" rel="stylesheet">
         <title>Project List</title>
     <!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
@@ -50,7 +52,7 @@
 
 
 
-  <div class="container">
+  <div class="container_1">
     <h2>Schedule Animation Tool</h2>
   <?php
     $result = mysqli_query($bd,"SELECT id,model_reference,start_date,end_date FROM project");
@@ -76,32 +78,26 @@ echo "</tbody>
 
 ?>
 </div>
-<footer>
-      <div class="container" id="bottom">
-        <p style="display:inline-block;">&copy;Scheduling Animation Tool</p>
-        <p style="display:inline-block; float:right;"><input type="checkbox" id="nightMode">NightMode</p>
-      </div>
-    </footer>
 
-    <script type="text/javascript">
+<script type="text/javascript">
     function prepareNightMode(){
       if(document.getElementById("nightMode").checked){
         document.body.style.backgroundColor = "gray";
-        document.getElementById("lineHr1").style.borderColor = "black";
-        document.getElementById("lineHr2").style.borderColor = "black";
-        document.getElementById("lineHr3").style.borderColor = "black";
       }else{
-        document.body.style.backgroundColor = "white";
-        document.getElementById("lineHr1").style.borderColor = "gray";
-        document.getElementById("lineHr2").style.borderColor = "gray";
-        document.getElementById("lineHr3").style.borderColor = "gray"; 
+        document.body.style.backgroundColor = "white"; 
       }
     }
     window.onload = function(){
       setInterval(prepareNightMode,50);
     }
     </script>
-    
+
+<footer>
+      <div class="container" id="bottom">
+        <p style="display:inline-block;">&copy;Scheduling Animation Tool</p>
+        <p style="display:inline-block; float:right;"><input type="checkbox" id="nightMode">NightMode</p>
+      </div>
+    </footer>
 </body>
 <style type="text/css">
     .container_1{

@@ -7,6 +7,9 @@
      <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+        <link rel="stylesheet" href="font-awesome-4.5.0/css/font-awesome.min.css">
+        <link href="css/template.css" rel="stylesheet">
+
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/pageafter1.css" rel="stylesheet">
@@ -33,13 +36,32 @@
           </div><!--/.nav-collapse -->
         </div>
      </div>
+     <div class="container">
+        <br><br><br><br><br><h2>Your Session has been Timed Out!</h2>
+        <h4>Kindly login again after redirecting.</h4>
+        <h4>You will be redirected automatically in about 5 Seconds..</h4>
+        <h4>If not, click <a href='logout.php'>here</a></h4>
+       
+     </div>
 
 <?php 
-	echo "<br><br><br><br><br><p>Your session has been timed out. Kindly login again after redirecting";
 	header( "refresh:5;url=logout.php" ); 
-echo "<br>You will be redirected automatically in about 5 secs. ";
-echo "<br>If not, click <a href='logout.php'>here</a>.</p>";
  ?>
+
+
+<script type="text/javascript">
+    function prepareNightMode(){
+      if(document.getElementById("nightMode").checked){
+        document.body.style.backgroundColor = "gray";
+      }else{
+        document.body.style.backgroundColor = "white"; 
+      }
+    }
+    window.onload = function(){
+      setInterval(prepareNightMode,50);
+    }
+    </script>
+
 <footer>
       <div class="container" id="bottom">
         <p style="display:inline-block;">&copy;Scheduling Animation Tool</p>
