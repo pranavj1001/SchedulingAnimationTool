@@ -11,3 +11,7 @@ minimising any loss of production time. The main benefit of using the tool is th
 vessels by showing you where each vessels will be for the duration of the project and highlighting any issues. This tool is a
 particularly useful resource for companies operating a large vessel fleet or planning a complex subsea project as it offers full
 fleet management.
+
+##License
+
+MIT License
